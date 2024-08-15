@@ -19,3 +19,13 @@ jobs:
     
       - name: get github repository
         run: echo $GITHUB_REPOSITORY
+
+      - name: get PR head sha
+        if: github.ref == 'refs/heads/main'
+        run: |
+          gh_pr_head_sha=$(gh api repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls | jq '.[0].head.sha')
+          echo gh_pr_head_sha=$gh_pr_head_sha >> "$GITHUB_OUTPUT"
+      
+      - name: output PR head sha
+        if: github.ref == 'refs/heads/main'
+        run: echo ${{steps.get-pr-head-sha.outputs.gh_pr_head_sha}}
