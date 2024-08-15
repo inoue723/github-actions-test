@@ -16,3 +16,6 @@ jobs:
     steps:
       - name: show github sha
         run: echo $GITHUB_SHA
+    
+      - name: get github repository
+        run: echo $GITHUB_REPOSITORY
