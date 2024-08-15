@@ -30,6 +30,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
       
-      - name: output PR head sha
+      - name: get workflow run id
         if: github.ref == 'refs/heads/main'
-        run: echo ${{steps.get-pr-head-sha.outputs.pr_head_sha}}
+        run: |
+          workflow_run_id=$(gh run list -c "${{steps.get-pr-head-sha.outputs.pr_head_sha}}" -L 1 --json 'databaseId' -q '.[0].databaseId')
+          echo "$workflow_run_id"
+          echo "workflow_run_id=$workflow_run_id" >> "$GITHUB_OUTPUT"
