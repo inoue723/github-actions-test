@@ -25,10 +25,11 @@ jobs:
         id: get-pr-head-sha
         run: |
           pr_head_sha=$(gh api repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls | jq '.[0].head.sha')
+          echo "$pr_head_sha"
           echo pr_head_sha=$gh_pr_head_sha >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ github.token }}
       
       - name: output PR head sha
         if: github.ref == 'refs/heads/main'
-        run: echo ${{steps.get-pr-head-sha.outputs.pr_head_sha}}
+        run: echo "${{steps.get-pr-head-sha.outputs.pr_head_sha}}"
