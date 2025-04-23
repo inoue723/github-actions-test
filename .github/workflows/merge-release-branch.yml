@@ -24,14 +24,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Merge release branch to develop
-        run: |
-          git checkout develop
-          git pull origin develop
-          echo "マージするブランチ: ${{ github.event.inputs.release_branch_name }}"
-          git merge --no-ff "${{ github.event.inputs.release_branch_name }}" -m "Merge release branch ${{ github.event.inputs.release_branch_name }} into develop"
-          git push origin develop
-
       - name: Merge release branch to main
         run: |
           git checkout main
