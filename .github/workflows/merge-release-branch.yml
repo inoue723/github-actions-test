@@ -10,6 +10,8 @@ on:
 
 jobs:
   merge_branches:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -17,7 +19,6 @@ jobs:
         with:
           # 全てのブランチ履歴を取得するために fetch-depth: 0 を指定
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }} # プッシュするために必要
 
       - name: Configure Git user
         run: |
