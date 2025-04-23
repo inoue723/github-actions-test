@@ -1,0 +1,27 @@
+name: Test Skip Dependent Jobs
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_first_job:
+        description: 'Run the first job?'
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  job_a:
+    runs-on: ubuntu-latest
+    # Only run job_a if the input 'run_first_job' is true
+    if: github.event.inputs.run_first_job == true
+    steps:
+      - name: Run Job A
+        run: echo "Job A executed"
+
+  job_b:
+    # job_b depends on job_a
+    needs: job_a
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Job B
+        run: echo "Job B executed" 
