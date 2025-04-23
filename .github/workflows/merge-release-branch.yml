@@ -28,9 +28,8 @@ jobs:
       - name: Merge release branch to main
         run: |
           git checkout ${{ github.event.inputs.release_branch_name }}
-          git checkout main
           echo "マージするブランチ: ${{ github.event.inputs.release_branch_name }}"
-          git merge --no-ff "${{ github.event.inputs.release_branch_name }}" -m "Merge release branch ${{ github.event.inputs.release_branch_name }} into main"
+          git merge --no-ff "origin/${{ github.event.inputs.release_branch_name }}" -m "Merge ${{ github.event.inputs.release_branch_name }} into main"
           git push origin main
 
       - name: Delete release branch
