@@ -1,0 +1,44 @@
+# リリースブランチをdevelopブランチとmainブランチにマージするワークフロー
+name: Merge Release Branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_branch_name:
+        description: 'マージするリリースブランチ名 (例: release/YYYYMMDD)'
+        required: true
+
+jobs:
+  merge_branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # 全てのブランチ履歴を取得するために fetch-depth: 0 を指定
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }} # プッシュするために必要
+
+      - name: Configure Git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge release branch to develop
+        run: |
+          git checkout develop
+          git pull origin develop
+          echo "マージするブランチ: ${{ github.event.inputs.release_branch_name }}"
+          git merge --no-ff "${{ github.event.inputs.release_branch_name }}" -m "Merge release branch ${{ github.event.inputs.release_branch_name }} into develop"
+          git push origin develop
+
+      - name: Merge release branch to main
+        run: |
+          git checkout main
+          git pull origin main
+          echo "マージするブランチ: ${{ github.event.inputs.release_branch_name }}"
+          git merge --no-ff "${{ github.event.inputs.release_branch_name }}" -m "Merge release branch ${{ github.event.inputs.release_branch_name }} into main"
+          git push origin main
+
+      - name: Delete release branch
+        run: git push origin --delete "${{ github.event.inputs.release_branch_name }}"
