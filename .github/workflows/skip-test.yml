@@ -7,15 +7,16 @@ on:
         description: 'Run the first job?'
         required: true
         type: boolean
+        default: true
 
 jobs:
   job_a:
     runs-on: ubuntu-latest
     # Only run job_a if the input 'run_first_job' is true
-    # if: github.event.inputs.run_first_job == true
+    if: ${{ github.event.inputs.run_first_job == 'true' }}
     steps:
       - name: Run Job A
-        run: echo "${{ github.event.inputs.run_first_job }}"
+        run: echo "Job A executed"
 
   job_b:
     # job_b depends on job_a
