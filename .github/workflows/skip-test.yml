@@ -7,7 +7,6 @@ on:
         description: 'Run the first job?'
         required: true
         type: boolean
-        default: true
 
 jobs:
   job_a:
